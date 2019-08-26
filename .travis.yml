@@ -4,4 +4,7 @@ node_js:
 
 script:
   - make lint
+<<<<<<< HEAD
   - make test
+=======
+>>>>>>> ad83df5ce646e69597f8991ab5d4f69dadbdd1bc
