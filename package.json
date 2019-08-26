@@ -7,31 +7,37 @@
     "Project #2",
     "Hexlet"
   ],
+  "main": "dist/index.js",
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
   "files": [
     "dist"
   ],
-  "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "testWatch": "jest -- watch"
   },
   "author": "Fedir Anichkin",
   "license": "ISC",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "lodash": "^4.17.15"
+  },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.4",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.9.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-babel": "^5.3.0",
-    "eslint-plugin-import": "^2.17.2"
-  },
-  "dependencies": {
-    "commander": "^2.20.0"
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "22.15.0",
+    "jest": "^24.8.0"
   }
 }
