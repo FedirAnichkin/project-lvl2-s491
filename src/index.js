@@ -1,29 +1,26 @@
 import _ from 'lodash';
-import fs from 'fs';
+import parse from './parsers';
 
-const pathConfig = (config) => {
-  const data = fs.readFileSync(config, 'utf-8');
-  return JSON.parse(data);
-};
 
 export default (pathToFile1, pathToFile2) => {
-  const file1 = pathConfig(pathToFile1);
-  const file2 = pathConfig(pathToFile2);
+  const file1 = parse(pathToFile1);
+  const file2 = parse(pathToFile2);
 
-  const allKeys = [...Object.keys(file1), ...Object.keys(file2)];
-  const uniqueKeys = allKeys.reduce((acc, key) => (acc.includes(key) ? acc : [...acc, key]), []);
+  const allKeys = { ...file1, ...file2 };
 
-  const result = uniqueKeys.reduce((acc, key) => {
-    if (file1[key] === file2[key]) {
-      return [...acc, `\n    ${key}: ${file2[key]}`];
-    }
-    if (_.has(file1, key) && !_.has(file2, key)) {
-      return [...acc, `\n  - ${key}: ${file1[key]}`];
+  const reduced = (acc, value, key) => {
+    if (_.has(file1, key) && _.has(file2, key)) {
+      return file1[key] === file2[key]
+        ? [...acc, `    ${key}: ${value}`]
+        : [...acc, `  + ${key}: ${file2[key]}`, `  - ${key}: ${file1[key]}`];
     }
     if (!_.has(file1, key) && _.has(file2, key)) {
-      return [...acc, `\n  + ${key}: ${file2[key]}`];
+      return [...acc, `  + ${key}: ${value}`];
     }
-    return [...acc, `\n  + ${key}: ${file2[key]}`, `\n  - ${key}: ${file1[key]}`];
-  }, []);
-  return `{${result}\n}`;
+    return [...acc, `  - ${key}: ${value}`];
+  };
+
+  const preResult = _.reduce(allKeys, reduced, '');
+  const result = `{\n${preResult.join('\n')}\n}`;
+  return result;
 };
