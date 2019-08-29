@@ -3,3 +3,7 @@
 [![Build Status](https://travis-ci.com/FedirAnichkin/project-lvl2-s491.svg?branch=master)](https://travis-ci.com/FedirAnichkin/project-lvl2-s491)
 
 [![asciicast](https://asciinema.org/a/4cL013aH70VWr95jx6PsDQaeI.svg)](https://asciinema.org/a/4cL013aH70VWr95jx6PsDQaeI)
+
+[![asciicast](https://asciinema.org/a/4cL013aH70VWr95jx6PsDQaeI.svg)](https://asciinema.org/a/4cL013aH70VWr95jx6PsDQaeI)
+
+[![asciicast](https://asciinema.org/a/x5aGyetWpscFs7xDLpjutLK6Y.svg)](https://asciinema.org/a/x5aGyetWpscFs7xDLpjutLK6Y)
