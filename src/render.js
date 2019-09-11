@@ -13,15 +13,15 @@ const addSpace = (count) => {
   return iter(count, '');
 };
 const stringify = (data, spaceCount) => {
-  const textGap = 6;
-  const braceGap = 2;
+  const gapText = 6;
+  const gapBrace = 2;
   if (typeof data !== 'object') {
     return data;
   }
-  const space = addSpace(spaceCount + textGap);
+  const space = addSpace(spaceCount + gapText);
   const keys = Object.keys(data);
   const result = keys.map(key => `${key}: ${data[key]}`).join('\n');
-  return `{\n${space}${result}\n${addSpace(spaceCount + braceGap)}}`;
+  return `{\n${space}${result}\n${addSpace(spaceCount + gapBrace)}}`;
 };
 const render = (ast) => {
   const textGap = 4;
@@ -30,7 +30,10 @@ const render = (ast) => {
     const space = addSpace(spaceCount);
     const result = tree.map((element) => {
       if (!element.children) {
-        return `${space}${statusType[element.status]}${element.name}: ${stringify(element.value, spaceCount)}`;
+        if (element.status !== 'changed') {
+          return `${space}${statusType[element.status]}${element.name}: ${stringify(element.value, spaceCount)}`;
+        }
+        return `${space}${statusType.added}${element.name}: ${stringify(element.value.to, spaceCount)}\n${space}${statusType.deleted}${element.name}: ${stringify(element.value.from, spaceCount)}`;
       }
       return `${space}${statusType[element.status]}${element.name}: ${iter(element.children, spaceCount + textGap)}`;
     }).join('\n');
