@@ -2,7 +2,7 @@ install:
 	npm install
 
 start:
-	npx babel-node src/bin/gendiff.js
+	npx babel-node -- src/bin/genDiff.js
 
 build:
 	rm -rf dist

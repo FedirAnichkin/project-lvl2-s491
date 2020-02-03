@@ -1,5 +1,5 @@
 import parse from './parsers';
-import render from './render';
+import render from './renderer/render';
 import getAST from './getAST';
 
 

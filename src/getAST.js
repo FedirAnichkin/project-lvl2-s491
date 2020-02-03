@@ -1,44 +1,44 @@
-import _ from 'lodash';
+import { union, isPlainObject } from 'lodash';
 
-const getAST = (file1, file2) => {
-  const keys = _.union(Object.keys(file1), Object.keys(file2));
-  const result = keys.map((key) => {
-    const name = key;
-
-    if (!_.has(file1, key)) {
-      const value = file2[key];
-      const status = 'added';
-      return { name, value, status };
+const genAst = (tree1, tree2) => {
+  const keys = union(Object.keys(tree1), Object.keys(tree2));
+  const result = keys.reduce((acc, key) => {
+    if (tree1[key] && tree2[key]) {
+      if (isPlainObject(tree1[key]) && isPlainObject(tree2[key])) {
+        return [...acc, {
+          type: 'complex',
+          key,
+          children: genAst(tree1[key], tree2[key]),
+        }];
+      }
+      if (tree1[key] === tree2[key]) {
+        return [...acc, {
+          type: 'actual',
+          key,
+          oldValue: tree1[key],
+        }];
+      }
+      return [...acc, {
+        type: 'changed',
+        key,
+        oldValue: tree1[key],
+        newValue: tree2[key],
+      }];
     }
-
-    if (!_.has(file2, key)) {
-      const value = file1[key];
-      const status = 'deleted';
-      return { name, value, status };
+    if (!tree1[key]) {
+      return [...acc, {
+        type: 'added',
+        key,
+        newValue: tree2[key],
+      }];
     }
-
-    if (typeof file1[key] === 'object' && typeof file2[key] === 'object') {
-      const status = 'changeless';
-      const children = getAST(file1[key], file2[key]);
-      return {
-        name, value: '', status, children,
-      };
-    }
-
-    if (file1[key] === file2[key]) {
-      const status = 'changeless';
-      const value = file1[key];
-      return { name, value, status };
-    }
-    const status = 'changed';
-    const value = {
-      from: file1[key],
-      to: file2[key],
-    };
-
-    return { name, value, status };
-  });
+    return [...acc, {
+      type: 'deleted',
+      key,
+      oldValue: tree1[key],
+    }];
+  }, []);
   return result;
 };
 
-export default getAST;
+export default genAst;
