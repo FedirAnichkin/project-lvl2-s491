@@ -1,6 +1,6 @@
-import { union, isPlainObject } from 'lodash';
+import { has, union, isPlainObject } from 'lodash';
 
-const genAst = (tree1, tree2) => {
+const getAst = (tree1, tree2) => {
   const keys = union(Object.keys(tree1), Object.keys(tree2));
   const result = keys.reduce((acc, key) => {
     if (tree1[key] && tree2[key]) {
@@ -8,7 +8,7 @@ const genAst = (tree1, tree2) => {
         return [...acc, {
           type: 'complex',
           key,
-          children: genAst(tree1[key], tree2[key]),
+          children: getAst(tree1[key], tree2[key]),
         }];
       }
       if (tree1[key] === tree2[key]) {
@@ -25,7 +25,7 @@ const genAst = (tree1, tree2) => {
         newValue: tree2[key],
       }];
     }
-    if (!tree1[key]) {
+    if (!has(tree1, key)) {
       return [...acc, {
         type: 'added',
         key,
@@ -41,4 +41,4 @@ const genAst = (tree1, tree2) => {
   return result;
 };
 
-export default genAst;
+export default getAst;

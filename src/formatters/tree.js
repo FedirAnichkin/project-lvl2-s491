@@ -9,7 +9,7 @@ const stringify = (value, l) => {
   return `{\n${margin.slice(0, -1)}${result.slice(2, -2)}\n${margin.slice(0, -4)}}`;
 };
 
-const render = (ast, l = 0) => {
+const tree = (ast, l = 0) => {
   const diff = ast.reduce((acc, item) => {
     const {
       key,
@@ -19,7 +19,7 @@ const render = (ast, l = 0) => {
       children,
     } = item;
     if (type === 'complex') {
-      return [...acc, `    ${key}: ${render(children, l + 1)}`];
+      return [...acc, `    ${key}: ${tree(children, l + 1)}`];
     }
     if (type === 'actual') {
       return [...acc, `    ${key}: ${stringify(oldValue, l + 1)}`];
@@ -39,4 +39,4 @@ const render = (ast, l = 0) => {
   return `{\n${margin}${result}\n${margin}}`;
 };
 
-export default render;
+export default tree;

@@ -9,7 +9,7 @@ test.each(currentFormat)(
   (format) => {
     const before = `${dirPath}beforeTree.${format}`;
     const after = `${dirPath}afterTree.${format}`;
-    const expected = fs.readFileSync(`${dirPath}expectedTree.txt`, 'utf-8');
-    expect(gendiff(before, after)).toBe(expected);
+    const expected = fs.readFileSync(`${dirPath}expectedJson.txt`, 'utf-8');
+    expect(gendiff(before, after, 'json')).toBe(expected);
   },
 );
